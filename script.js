@@ -23,12 +23,31 @@ var uiController = (function () {
 })();
 // Санхүүтэй ажиллах контроллер
 var financeController = (function () {
-
+    var Income = function (id, description, value) {
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    }
+    var Expense = function (id, description, value) {
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    }
+    var data = {
+        allItems: {
+            inc: [],
+            exp: []
+        },
+        totals: {
+            inc: 0,
+            exp: 0
+        }
+    }
 })();
 // Холбогч контроллер
 var appController = (function (uiController, financeController) {
 
-    var DOM = uiController.getDOMstrings();
+    // Хэрэглэгчийн өгсөн утгыг iuController-оос авч addBtn-ыг ажилуулах
     var ctrlAddItem = function () {
         // 1. Оруулах өгөгдлийг дэлгэцээс авна
         console.log(uiController.getInput());
@@ -40,14 +59,27 @@ var appController = (function (uiController, financeController) {
 
         // 5. Эцсийн үлдэгдэл, тооцоог дэлгэцэнд гаргана
     }
-
-    document.querySelector(DOM.addBtn).addEventListener('click', function () {
-        ctrlAddItem();
-    });
-    document.addEventListener('keypress', function (event) {
-        // event.which -> for old fashioned browser
-        if (event.keyCode === 13 || event.which === 13) {
+    // EventListener нэмэх функц
+    var setupEventListeners = function () {
+        var DOM = uiController.getDOMstrings();
+        document.querySelector(DOM.addBtn).addEventListener('click', function () {
             ctrlAddItem();
+        });
+        document.addEventListener('keypress', function (event) {
+            // event.which -> for old fashioned browser
+            if (event.keyCode === 13 || event.which === 13) {
+                ctrlAddItem();
+            }
+        });
+    }
+
+    return {
+        init: function () {
+            console.log('Application started...');
+            setupEventListeners();
+
         }
-    });
+    }
 })(uiController, financeController);
+
+appController.init();
